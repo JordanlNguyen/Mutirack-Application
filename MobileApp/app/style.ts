@@ -1,6 +1,14 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
+    title : {
+        fontSize : 80,
+        color : 'white',
+        alignItems : 'center',
+        fontFamily : 'serif',
+        paddingBottom : 50
+    },
+
     container : {
         backgroundColor : '#2c2e33',
         flex : 1,
@@ -156,5 +164,20 @@ export default StyleSheet.create({
         height : 40,
         alignItems : 'center',
         borderRadius : 30
+    },
+
+    //overview styles
+    overviewTitle : {
+        fontSize : 50,
+        position : 'absolute',
+        top : 50
+    },
+    overviewTextFields : {
+        backgroundColor : 'white',
+        width : '80%',
+        height : '5%',
+        margin : 20,
+        borderRadius : 10,
+        
     }
 });

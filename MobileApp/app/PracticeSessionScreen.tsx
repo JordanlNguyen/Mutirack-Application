@@ -54,11 +54,23 @@ export default function PracticeSessionScreen() {
     }, []);
 
     const finishSession = () => {
-
+        //redirect to overview screen
+        //send duration in seconds and day of practice
+        //when practice is done, track time of stopping practice and date of stop practice
+        router.push({
+            pathname : "/PracticeOverviewScreen",
+            params : {
+                duration : totalSecondsRef.current.toString(),
+                startTime : startTime,
+                startDate : startDate,
+                endTime : new Date().toLocaleTimeString(),
+                endDate : new Date().toLocaleDateString()
+            }
+        });
     }
     
     return (
-        <View style={[style.container]}>
+        <View style={[style.container, {flex : 2}]}>
             <Pressable style={style.topBar} onPress={() => router.back()}>
                 <Text style ={{fontSize : 30}}> {"<"} </Text>
             </Pressable>
@@ -81,3 +93,7 @@ export default function PracticeSessionScreen() {
         </View>
     );
 }
+
+// ----------------------- to do ------------------------------
+// - logical error where user can go to overview without starting practice session
+// - when done is pressed, timer should stop

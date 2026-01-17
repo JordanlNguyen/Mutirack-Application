@@ -1,55 +1,59 @@
 import style from './style';
-import {View, Text, Pressable} from 'react-native';
-import { useEffect, useState } from 'react';
+import {View, Text, Pressable, Animated} from 'react-native';
+import { useEffect, useState, useRef } from 'react';
 import {router} from 'expo-router';
 import tocken from '../tockenServices';
+import {db} from '../databaseModule';
 
 export default function Home(){
 
+    const [displayedMessage, setDisplayedMessage] = useState(`Hello ${db.getUserName()}`);
+
+    const [practicedToday, setPracticedToday] = useState(db.getTotalPracticeToday());
+    const [practicedThisWeek, setPracticedThisWeek] = useState(db.getTotalPracticeThisWeek());
+    const [practicedThisMonth, setPracticedThisMonth] = useState(db.getTotalPracticeThisMonth());
+    const userName = db.getUserName();
+    const fadeAnim = useRef(new Animated.Value(1)).current;
+    const currentIndexRef = useRef(0);
     const messages = [
-        "Hello Name",
-        "Welcome Back!",
-        "Have a great day!",
-        "Ready to explore?",
-        "Let's get started!"
+        `Hello ${userName}`,
+        `Todays Practice : ${practicedToday}`,
+        `This Weeks Practice : ${practicedThisWeek}`,
+        `This Months Practice : ${practicedThisMonth}`
     ];
-    const [curMessageIndex, setCurMessageIndex] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {setCurMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);}, 3000); //milliseconds
+        const interval = setInterval(() => {
+            // Fade out
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: true,
+            }).start(() => {
+                // After fade out, change message
+                currentIndexRef.current = (currentIndexRef.current + 1) % messages.length;
+                setDisplayedMessage(messages[currentIndexRef.current]);
+                // Then fade in
+                Animated.timing(fadeAnim, {
+                    toValue: 1,
+                    duration: 500,
+                    useNativeDriver: true,
+                }).start();
+            });
+        }, 3000);
         return () => clearInterval(interval);
     }, []);
 
-    function redirectToPracticeSession(){
-        router.push('/PracticeSessionScreen');
-    }
-
-    {/* data fetching */}
-    const [dayPracticeTime, setDayPracticeTime] = useState(0);
-    const [weekPracticeTime, setWeekPracticeTime] = useState(0);
-    const [monthPracticeTime, setMonthPracticeTime] = useState(0);
-    function getTotalPracticeTime(){
-        const userTocken = tocken.getTocken();
-        
-    }
 
     return(
         <View style={[style.container, { justifyContent : 'flex-start'}]}>
-            <View style={style.dynamicHomeDashboard}>
-                <Text style={{fontSize : 60}}> {messages[curMessageIndex]} </Text>
+            <View style={style.statusContainer}>
+                <Animated.Text style={{fontSize : 30, fontFamily : 'serif', textAlign : 'center', color : 'white', opacity: fadeAnim}}> {displayedMessage} </Animated.Text>
             </View>
-            <Pressable style={style.practiceButton} onPress={redirectToPracticeSession}>
-                <Text> Start Practice Session</Text>
+            
+            <Pressable style={style.practiceButton}>
+                <Text style={style.practiceButtonText}> Start Practice Session</Text>
             </Pressable>
         </View>
     );
 }
-
-/* Needed for home screen display
- * 
- * - name
- * - total practice session
- *   - day
- *   - week
- *   - month
- */

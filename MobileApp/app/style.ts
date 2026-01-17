@@ -87,28 +87,6 @@ export default StyleSheet.create({
         borderRadius : 100,
         width : 300,
     },
-
-    dynamicHomeDashboard : {
-        backgroundColor : '#5a82e7',
-        width : '90%',
-        height : '25%',
-        borderRadius : 20,
-        paddingTop : 20,
-        justifyContent : 'center',
-        alignItems : 'center'
-    },
-
-    practiceButton : {
-        backgroundColor : '#727888',
-        width : '90%',
-        height : '10%',
-        justifyContent : 'center',
-        alignItems : 'center',
-        borderRadius : 20,
-        marginTop : 10,
-        padding : 5,
-    },
-
     //practice session style
     practiceSessionTitle : {
         fontSize : 30,
@@ -179,5 +157,27 @@ export default StyleSheet.create({
         margin : 20,
         borderRadius : 10,
         
+    },
+
+    //home screen css
+    statusContainer : {
+        justifyContent : 'center',
+        alignItems : 'center',
+        margin : 20
+    },
+        practiceButton : {
+        backgroundColor : '#727888',
+        width : '90%',
+        height : '10%',
+        justifyContent : 'center',
+        alignItems : 'center',
+        borderRadius : 20,
+        marginTop : 20,
+        padding : 10,
+    },
+    practiceButtonText : {
+        fontSize : 30,
+        fontFamily : 'serif',
     }
+
 });

@@ -12,12 +12,19 @@
 
 import { openDatabaseSync, SQLiteDatabase } from 'expo-sqlite';
 
+type Piece = {
+    id : number;
+    name : string;
+    composer: string;
+    instrumentation : string;
+};
+
 class DataBaseManager{
     db: SQLiteDatabase;
     userName: string;
 
     constructor(userName: string = "New User"){
-        this.db = openDatabaseSync("practice.db");
+        this.db = openDatabaseSync("practice1.db");
         this.userName = userName;
         this.init();
     }
@@ -32,6 +39,7 @@ class DataBaseManager{
                 id TEXT PRIMARY KEY NOT NULL,
                 duration INTEGER NOT NULL,
                 startDate TEXT NOT NULL,
+                startTime TEXT NOT NULL,
                 notes TEXT
             )
         `);
@@ -48,7 +56,6 @@ class DataBaseManager{
                 id TEXT PRIMARY KEY NOT NULL,
                 piece_id TEXT NOT NULL,
                 session_id TEXT NOT NULL,
-                date TEXT NOT NULL,
                 FOREIGN KEY(piece_id) REFERENCES pieces(id),
                 FOREIGN KEY(session_id) REFERENCES practice_sessions(id)
             )
@@ -87,6 +94,41 @@ class DataBaseManager{
             WHERE startDate BETWEEN ? AND ?
             `, [startOfMonthStr, todayStr]);
         return result.total || 0;
+    }
+
+    getUserPieces(): Piece[]{
+        try{
+            const result = this.db.getAllSync(`SELECT * FROM pieces`) as Piece[];
+            return Array.isArray(result) ? result : [];
+        } catch(error) {
+            console.error('Failed to retrieve pieces', error);
+            return [];
+        }
+    }
+
+    addPiece(name: string, composer: string, instrumentation: string) {
+        const pieceId = Date.now().toString();
+        try {
+            this.db.runSync(`INSERT INTO pieces (id, name, composer, instrumentation) VALUES (?, ?, ?, ?)`, 
+                [pieceId, name, composer, instrumentation]);
+        } catch (error) {
+            console.error('Failed to add piece', error);
+        }
+    }
+
+    injectPracticeSession(pieceIDs : number[], startDate : string, startTime : string, duration : number, notes : string){
+        const sessionId = Date.now().toString();
+        try {
+            this.db.runSync(`INSERT INTO practice_sessions (id, duration, startDate, startTime, notes) VALUES (?, ?, ?, ?, ?)`, 
+                [sessionId, duration, startDate, startTime, notes]);
+            pieceIDs.forEach(pieceID => {
+                const practicedId = Date.now().toString() + Math.random().toString();
+                this.db.runSync(`INSERT INTO practiced_pieces (id, piece_id, session_id) VALUES (?, ?, ?)`, 
+                    [practicedId, pieceID, sessionId]);
+            });
+        } catch (error) {
+            console.error('Failed to inject practice session', error);
+        }
     }
 }
 

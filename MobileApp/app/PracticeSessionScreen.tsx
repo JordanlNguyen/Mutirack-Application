@@ -12,7 +12,7 @@ export default function PracticeSessionScreen() {
     const [startTime, setStartTime] = useState('not started')
     const [startDate, setStartDate] = useState('not started')
 
-    const timerRef = useRef<number | null>(null);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
     const totalSecondsRef = useRef(0);
 
   // start the timer
@@ -71,10 +71,10 @@ export default function PracticeSessionScreen() {
     
     return (
         <View style={[style.container, {flex : 2}]}>
-            <Pressable style={style.topBar} onPress={() => router.back()}>
-                <Text style ={{fontSize : 30}}> {"<"} </Text>
+            <Pressable style={style.backButton} onPress={() => router.back()}>
+                <Text style ={{fontSize : 30, color : 'white'}}> {"<-"} </Text>
             </Pressable>
-            <Text style={style.practiceSessionTitle}> Practice Session </Text>
+            <Text style={style.header}> Practice Session </Text>
             <View style={style.timerContainter}>
                 <Text style={style.time}> {hour}:{minute}:{second}</Text>
             </View>

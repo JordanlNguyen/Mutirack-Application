@@ -12,3 +12,14 @@ this phase will include a local storage option using SQLite where database will 
 ![Diagram](./practice_session_entity_relation.drawio.pdf)
 
 once a created, a practice session will have properties describing the time of the practice session. Pieces hold the foriegn key of a practice session.
+
+## Practice Sessions
+- A practice session should contain the following
+    1. times
+    - a. duration of practice
+    - b. start time
+    - c. end time
+    - d. pause time = (startTime - endTime) - duration
+    2. music information
+    - piece(s) practiced
+    - notes about practice sessions

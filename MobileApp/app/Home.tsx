@@ -1,7 +1,7 @@
 import style from './style';
 import {View, Text, Pressable, Animated} from 'react-native';
-import { useEffect, useState, useRef } from 'react';
-import {router} from 'expo-router';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import {router, useFocusEffect} from 'expo-router';
 import tocken from '../tockenServices';
 import {db} from '../databaseModule';
 
@@ -12,9 +12,19 @@ export default function Home(){
     const [practicedToday, setPracticedToday] = useState(db.getTotalPracticeToday());
     const [practicedThisWeek, setPracticedThisWeek] = useState(db.getTotalPracticeThisWeek());
     const [practicedThisMonth, setPracticedThisMonth] = useState(db.getTotalPracticeThisMonth());
-    const userName = db.getUserName();
+    const [userName, setUserName] = useState(db.getUserName());
     const fadeAnim = useRef(new Animated.Value(1)).current;
     const currentIndexRef = useRef(0);
+    useFocusEffect(
+    useCallback(() => {
+        const name = db.getUserName();
+
+        setUserName(name);
+        setPracticedToday(db.getTotalPracticeToday());
+        setPracticedThisWeek(db.getTotalPracticeThisWeek());
+        setPracticedThisMonth(db.getTotalPracticeThisMonth());
+    }, [])
+    );
     const messages = [
         `Hello ${userName}`,
         `Todays Practice : ${practicedToday}`,
@@ -51,7 +61,7 @@ export default function Home(){
                 <Animated.Text style={{fontSize : 30, fontFamily : 'serif', textAlign : 'center', color : 'white', opacity: fadeAnim}}> {displayedMessage} </Animated.Text>
             </View>
             
-            <Pressable style={style.practiceButton}>
+            <Pressable style={style.practiceButton} onPress={() => router.push('/PracticeSessionScreen')}>
                 <Text style={style.practiceButtonText}> Start Practice Session</Text>
             </Pressable>
         </View>

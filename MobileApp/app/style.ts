@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
+    //global style
     title : {
         fontSize : 80,
         color : 'white',
@@ -8,25 +9,23 @@ export default StyleSheet.create({
         fontFamily : 'serif',
         paddingBottom : 50
     },
-
     container : {
         backgroundColor : '#2c2e33',
         flex : 1,
         justifyContent : 'center',
         alignItems : 'center'
     },
-
-    spacing : {
-        height : 30,
-    },
-
     textFieldContainer : {
         width : 300,
     },
 
-    textFieldHeader : {
-        fontSize : 20,
+    header : {
+        fontSize : 30,
         color : 'white',
+        padding : 30,
+        position : 'absolute',
+        top : 0,
+        fontFamily : 'serif'
     },
 
     //index screen styling
@@ -87,12 +86,7 @@ export default StyleSheet.create({
         borderRadius : 100,
         width : 300,
     },
-    //practice session style
-    practiceSessionTitle : {
-        fontSize : 30,
-        color : 'white',
-        padding : 30
-    },
+    //practice session style ----------------
     timerContainter : {
         borderColor : "grey",
         borderWidth : 2,
@@ -125,30 +119,32 @@ export default StyleSheet.create({
         backgroundColor : 'white',
         justifyContent : 'center',
         position : 'absolute',
-        bottom : 50,
-        right : 50,
+        bottom : 25,
+        right : 20,
         width : 100,
         height : 40,
         alignItems : 'center',
         borderRadius : 30
     },
-    topBar : {
-        backgroundColor : 'white',
+    backButton : {
         justifyContent : 'center',
         position : 'absolute',
-        top : 50,
-        left : 50,
+        top : 30,
+        left : 25,
         width : 50,
         height : 40,
         alignItems : 'center',
         borderRadius : 30
     },
 
-    //overview styles
+    //overview styles ------------------------
     overviewTitle : {
-        fontSize : 50,
+        fontSize : 30,
+        color : 'white',
+        padding : 30,
         position : 'absolute',
-        top : 50
+        top : 0,
+        fontFamily : 'serif'
     },
     overviewTextFields : {
         backgroundColor : 'white',
@@ -157,6 +153,47 @@ export default StyleSheet.create({
         margin : 20,
         borderRadius : 10,
         
+    },
+    duration : {
+        color : 'white',
+        fontSize : 20,
+        position : 'absolute',
+        top : 150
+    }, 
+    pieceListContainer : {
+        backgroundColor : 'red',
+        width : '90%',
+        justifyContent : 'center',
+        alignItems : 'center',
+        borderRadius : 20
+    },
+    itemText : {
+        fontSize : 22
+    },
+    OverviewNotes : {
+        backgroundColor : '#535760',
+        width : '90%',
+        height : '50%',
+        margin : 10,
+        borderRadius : 20,
+        verticalAlign : 'top',
+        fontSize : 20
+    },
+    overViewSubText : {
+        fontSize : 20,
+        color : 'white',
+        fontFamily : 'serif',
+        padding : 10
+    },
+    overViewSubmit : {
+        backgroundColor : 'white',
+        position : 'absolute',
+        bottom : 20,
+        right : 20,
+        width : 60,
+        height : 40,
+        alignItems : 'center',
+        justifyContent : 'center'
     },
 
     //home screen css

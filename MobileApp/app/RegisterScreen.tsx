@@ -2,7 +2,7 @@ import {View, Text, TextInput, Button, Pressable} from 'react-native';
 import React from 'react';
 import {router} from 'expo-router';
 import { useState } from 'react';
-import style from './style';
+import style from '../style';
 import { BASE_URL } from '../config';
 import tocken from '../tockenServices';
 

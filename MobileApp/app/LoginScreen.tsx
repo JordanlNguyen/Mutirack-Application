@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Text, View, TextInput, Pressable} from 'react-native';
 import {router} from 'expo-router';
-import style from './style';
+import style from '../style';
 import {BASE_URL} from '../config';
 import tocken from '../tockenServices';
  

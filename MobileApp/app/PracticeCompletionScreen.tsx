@@ -1,7 +1,7 @@
 import { View, Text, TextInput} from 'react-native';
 import { useEffect } from 'react';
 import { router } from 'expo-router';
-import style from './style';
+import style from '../style';
 
 export default function PracticeCompletionScreen() {
 

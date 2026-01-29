@@ -2,7 +2,7 @@ import { View, Text, TextInput, Pressable, Alert } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { db } from '../databaseModule';
-import style from './style';
+import style from '../style';
 
 export default function AddNewPieceScreen() {
     const [name, setName] = useState('');

@@ -18,7 +18,6 @@ export default StyleSheet.create({
     textFieldContainer : {
         width : 300,
     },
-
     header : {
         fontSize : 30,
         color : 'white',
@@ -27,33 +26,27 @@ export default StyleSheet.create({
         top : 0,
         fontFamily : 'serif'
     },
-
-    //index screen styling
-    welcomeTitle : {
-        fontSize : 80,
-        color : 'white',
-        alignItems : 'center',
-        fontFamily : 'serif',
-        paddingBottom : 50
-    },
-    welcomeButtonContainer : {
-        width : 250,
+    navigationBar : {
+        backgroundColor : '#23252A',
+        width : '90%',
+        height : '10%',
+        position : 'absolute',
+        bottom : 2,
+        borderRadius : 28,
         justifyContent : 'center',
         alignItems : 'center',
         flexDirection : 'row',
+        gap : '7%'
     },
-    welcomeButtons : {
-        backgroundColor : 'white',
+    navigationBarItem : {
+        //8B9099 inactive icons
+        backgroundColor : '#E6E8EB',
+        width : 65,
+        height : 70,
+        jusitfyContent : 'center',
         alignItems : 'center',
-        justifyContent : 'center',
-        height : 50,
-        width : 100,
-        margin : 20,
-        borderRadius : 20,
-        borderColor : 'black',
-        borderWidth : 2
+        borderRadius : 26
     },
-
     //login styling
     loginTitle : {
         fontSize : 80,
@@ -75,26 +68,21 @@ export default StyleSheet.create({
         borderRadius : 100,
         width : 100,
     },
-
     registerTitle : {
         fontSize : 80,
         color : 'white',
         alignItems : 'center'
     },
-
     registerButton : {
         borderRadius : 100,
         width : 300,
     },
     //practice session style ----------------
     timerContainter : {
-        borderColor : "grey",
-        borderWidth : 2,
-        width : 300,
-        height : 200,
         justifyContent : 'center',
         alignItems : 'center',
-        flexDirection : 'column'
+        flexDirection : 'column',
+        margin : 20
     },
     time : {
         fontSize : 60,
@@ -109,34 +97,42 @@ export default StyleSheet.create({
     },
     timeButtons : {
         margin : 10,
-        width : 100,
-        height : 50,
+        width : 80,
+        height : 35,
         justifyContent : 'center',
         alignItems : 'center',
-        borderRadius : 50,
+        borderRadius : 20,
+    }, 
+    timeButtonText : {
+        fontSize : 20,
+        fontFamily : 'serif'
     },
     submitButton : {
         backgroundColor : 'white',
         justifyContent : 'center',
         position : 'absolute',
-        bottom : 25,
-        right : 20,
-        width : 100,
-        height : 40,
         alignItems : 'center',
+        bottom : 180,
+        width : 80,
+        height : 35,
         borderRadius : 30
     },
-    backButton : {
+    submitErrorMessageContainer : {
+        backgroundColor : 'grey',
+        width : 190,
+        height : 50,
         justifyContent : 'center',
+        textAlign : 'center',
+        borderRadius : 4,
         position : 'absolute',
-        top : 30,
-        left : 25,
-        width : 50,
-        height : 40,
-        alignItems : 'center',
-        borderRadius : 30
+        bottom : 120,
     },
-
+    pieceSelectionContainer : {
+        backgroundColor : '#484b53',
+        width : '70%',
+        maxHeight : '15%',
+        borderRadius : 10
+    },
     //overview styles ------------------------
     overviewTitle : {
         fontSize : 30,
@@ -154,15 +150,15 @@ export default StyleSheet.create({
         borderRadius : 10,
         
     },
-    duration : {
-        color : 'white',
-        fontSize : 20,
-        position : 'absolute',
-        top : 150
-    }, 
-    pieceListContainer : {
-        backgroundColor : 'red',
+    pieceContainer : {
+        backgroundColor : 'blue',
+        flexDirection : 'row',
         width : '90%',
+        gap : 20
+    },
+    notSelectedContainer : {
+        backgroundColor : 'red',
+        width : '45%',
         justifyContent : 'center',
         alignItems : 'center',
         borderRadius : 20

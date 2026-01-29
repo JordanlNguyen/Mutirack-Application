@@ -1,9 +1,10 @@
-import style from './style';
+import style from '../../style';
 import {View, Text, Pressable, Animated} from 'react-native';
 import { useEffect, useState, useRef, useCallback } from 'react';
-import {router, useFocusEffect} from 'expo-router';
+import {router, useFocusEffect, Tabs} from 'expo-router';
 import tocken from '../tockenServices';
-import {db} from '../databaseModule';
+import {db} from '../../databaseModule';
+import {BottomNavigatonBar} from '.tabs/BottomNavigationBar';
 
 export default function Home(){
 
@@ -61,9 +62,25 @@ export default function Home(){
                 <Animated.Text style={{fontSize : 30, fontFamily : 'serif', textAlign : 'center', color : 'white', opacity: fadeAnim}}> {displayedMessage} </Animated.Text>
             </View>
             
-            <Pressable style={style.practiceButton} onPress={() => router.push('/PracticeSessionScreen')}>
+            {/* commented out to accomidate for new bottom nav bar feature */}
+            {/* <Pressable style={style.practiceButton} onPress={() => router.push('/PracticeSessionScreen')}>
                 <Text style={style.practiceButtonText}> Start Practice Session</Text>
-            </Pressable>
+            </Pressable> */}
+            {/* <View style={style.navigationBar}>
+                <Pressable style={style.navigationBarItem}>
+                    <Text>Home</Text>
+                </Pressable>
+                <Pressable style={style.navigationBarItem}>
+                    <Text>Practice</Text>
+                </Pressable>
+                <Pressable style={style.navigationBarItem}>
+                    <Text>Analytics</Text>
+                </Pressable>
+                <Pressable style={style.navigationBarItem}>
+                    <Text>Settings</Text>
+                </Pressable>
+            </View> */}
+
         </View>
     );
 }

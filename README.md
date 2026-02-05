@@ -23,3 +23,5 @@ once a created, a practice session will have properties describing the time of t
     2. music information
     - piece(s) practiced
     - notes about practice sessions
+
+# Nodemon

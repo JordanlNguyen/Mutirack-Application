@@ -1,30 +1,53 @@
 import express from 'express'
-import {verifyUser, createUser, existUser} from '../services/users.js'
+import {getUser, createUser, existUser, createToken} from '../services/users.js'
 const userRouter = express.Router();
 
+// login user
 userRouter.post('/login', async (req,res) => {
-    // req: id:int, password:string
-    // table: users(username, password)
+
     const {userName, password} = req.body
+
+    //determine missing information
     if(!userName || !password){ return res.status(409).send("Missing information")}
-    const ret = await verifyUser(userName, password)
-    if(ret === -2) {return res.status(500).send("Internal error")}
-    if(ret === -1) {return res.status(400).send('Username not found')}
-    if(ret === 0) {return res.status(400).end('Password Incorrect')}
-    res.status(200).send("Success")
+
+    let token = null
+    const DBret = await getUser(userName, password)
+    if(DBret.success) {
+        token = createToken(DBret.user.userName, DBret.user.id)
+    }
+
+    return res.status(DBret.status).json({
+        success : DBret.success,
+        code: DBret.code,
+        message: DBret.message,
+        token: token
+    })
 })
 
-/* validates inputs is correct, checks is user exist, and puts new user into database*/
+// register user
 userRouter.post('/register', async (req, res) => {
-    const {name, phonenumber, userName, password} = req.body
-    const userExist = await existUser(userName)
-    if(userExist)  {return res.status(409).send("User Name already exist")}
-    if(!name || !phonenumber || !userName || !password) {return res.status(409).send("missing information")}
-    if (name.length>20 || phonenumber.length>10 || isNaN(phonenumber) || userName>30 || password.length>50)  {return res.status(409).send("Input information not valid, check lengths and phone number")}
 
-    const ret = await createUser(name, phonenumber, userName, password)
-    if(ret === -1){res.status(500).send("internal error")}
-    else if(ret === 1){res.status(200).send("Registration Successful")}
+    const {name, phonenumber, userName, password} = req.body
+    
+    if(!name || !phonenumber || !userName || !password) {
+        return res.status(409).send("missing information")
+    }
+    if (name.length>20 || phonenumber.length>10 || phonenumber.length<9 ||isNaN(phonenumber) || userName.length>30 || password.length>50) {
+        return res.status(409).send("Input information not valid, check lengths and phone number")
+    }
+    
+    let token = null
+    const DBret = await createUser(name, phonenumber, userName, password)
+    if(DBret.success){
+        token = createToken(DBret.userName, DBret.id)
+    }
+
+    return res.status(DBret.status).json({
+        success: DBret.success,
+        code: DBret.code,
+        message: DBret.message,
+        token: token
+    })
 })
 
 export default userRouter

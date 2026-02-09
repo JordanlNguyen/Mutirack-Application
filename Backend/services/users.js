@@ -1,31 +1,159 @@
-import {runQuery} from '../config/database.js'
+import dotenv from 'dotenv' //loads environment varaibles into Node.js runtime
 import crypto from 'crypto'
+import jwt from "jsonwebtoken"
+import {v4} from 'uuid'
+import pkg from '@prisma/client'
 
-export async function verifyUser(userName, password) {
-    const res = await runQuery("SELECT * FROM Users WHERE $1 = Users.userName", [userName])
-    if(res === -1) {return -2 /*-2: internal error*/}
-    if(res.rowCount == 0) {return -1 /*-1: not found*/}
+dotenv.config()
+const { PrismaClient } = pkg
+const prisma = new PrismaClient()
 
-    const hashedPassword = crypto.scryptSync(password, res.rows[0].salt, 64).toString('hex')
-    if(res.rows[0].password !== hashedPassword) {return 0 /*0: no match*/}
-    return 1
+
+export async function getUser(userName, password) {
+    
+    let DBret
+    try {
+        DBret = await prisma.user.findUnique({
+            where: {
+                userName: userName
+            }
+        })
+    } catch (error) {
+        return ({
+            status: 500,
+            success: false,
+            code: "DB_ERROR",
+            message: "An error occurred while accessing the database"
+        })
+    }
+    
+    if(DBret === undefined || DBret === null) {
+        return ({
+            status: 400,
+            success: false,
+            code: "USER_NOT_FOUND",
+            message: `Username '${userName}' not found`
+        })
+    }
+    
+    if(DBret.password !== crypto.scryptSync(password, DBret.salt, 64).toString('hex')) {
+        return ({
+            status: 400,
+            success: false,
+            code: "PASSWORD_INCORRECT",
+            message: "Password is incorrect"
+        })
+    }
+
+    return ({
+        status: 200,
+        success: true,
+        code: "LOGIN_SUCCESS",
+        user: DBret
+    })
 }
 
 export async function createUser(name, phonenumber, userName, password) {
-    console.log("creating user")
+
     const salt = crypto.randomBytes(16).toString('hex')
-    const hashedPassword = crypto.scryptSync(password, salt, 64).toString('hex')
-    var id = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
-    if(await runQuery('SELECT * FROM users WHERE id = $1', [id]).rowCount!=1) {
-        id = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
+
+    try {
+        // Check if username already exists
+        const existingUsername = await prisma.user.findUnique({
+            where: {
+                userName: userName
+            }
+        })
+
+        if (existingUsername) {
+            console.log("User Services error: Username already exists")
+            return {
+                status: 409,
+                success: false,
+                code: "USERNAME_EXISTS",
+                message: `Username '${userName}' is already taken`
+            }
+        }
+
+        // Check if phone number already exists
+        const existingPhone = await prisma.user.findUnique({
+            where: {
+                phoneNumber: phonenumber
+            }
+        })
+
+        if (existingPhone) {
+            console.log("User Services error: Phone number already exists")
+            return {
+                status: 409,
+                success: false,
+                code: "PHONE_EXISTS",
+                message: `Phone number '${phonenumber}' is already registered`
+            }
+        }
+
+        // Create user if both username and phone are unique
+        const res = await prisma.user.create({
+            data: {
+                id: v4().toString(),
+                name: name,
+                userName: userName,
+                password: crypto.scryptSync(password, salt, 64).toString('hex'),
+                phoneNumber: phonenumber,
+                salt: salt
+            }
+        })
+
+        return({
+            status: 200,
+            success: true,
+            id: res.id,
+            userName: res.userName
+        })
+    } catch (error) {
+        console.log("User Services error: ", error)
+        return {
+            status: 500,
+            success: false,
+            code: "CREATE_ERROR",
+            message: "An error occurred while creating the user"
+        }
     }
-    const ret = await runQuery('INSERT INTO users VALUES($1,$2,$3,$4,$5,$6)', [id,name, userName, hashedPassword, phonenumber, salt])
-    if(ret === -1) {return -1}
-    return 1
 }
 
 export async function existUser(userName) {
-    const res = await runQuery('SELECT * FROM users WHERE userName = $1', [userName])
-    if(res.rowCount === 0) {return false}
-    return true
+
+    const res = await prisma.user.findUnique({
+        where: {
+            userName: userName
+        }
+    })
+
+    return res === null ? false : true
+}
+
+export function createToken(un, id){
+
+    try {
+        return ({
+            status: 200,
+            success: true,
+            code: "TOKEN_CREATED",
+            message: "Token created successfully",
+            token: jwt.sign(
+                {
+                userName: un,
+                identificationNumber: id
+                },process.env.TKN_ACCESS_TOKEN_SECRET,
+                {expiresIn: "2h"}
+            )   
+        })
+    } catch(error) {
+        return ({
+            status: 500,
+            success: false,
+            code: "TOKEN_ERROR",
+            message: "An error occurred while creating the token"
+        })
+    }
 }

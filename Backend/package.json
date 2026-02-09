@@ -17,11 +17,16 @@
     "crypto": "^1.0.1",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.18.0",
-    "pq": "^0.0.3"
+    "pq": "^0.0.3",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@prisma/client": "^6.19.2",
+
+    "nodemon": "^3.1.11",
+    "prisma": "^6.19.2"
   },
   "comments": {
     "1": "type changed from commonjs to module to accomidate for aws-sdk"

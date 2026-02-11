@@ -63,6 +63,7 @@ export default function manualAdd() {
 
     await services.addSession({
       userId,
+      piecesPracticed,
       startDate,
       startTime,
       duration,

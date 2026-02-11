@@ -5,7 +5,7 @@ import {router} from 'expo-router';
 export default function compeltion(){
     useEffect (() => {
         const timer = setTimeout(() => {
-            router.replace('/');
+            router.replace('/(tabs)');
         }, 3000);
     }, []);
 

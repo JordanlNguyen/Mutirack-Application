@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { db } from "../src/databaseModule";
+import services from "../src/services";
 import style from "../src/style";
 
 export default function PracticeSessionScreen() {
@@ -22,8 +22,11 @@ export default function PracticeSessionScreen() {
   const startTimer = () => {
     if (running) return; // prevent multiple intervals
     if (startTime === "not started") {
-      setStartTime(new Date().toLocaleTimeString());
-      setStartDate(new Date().toLocaleDateString());
+      const now = new Date();
+      const date = now.toISOString().split('T')[0]; // YYYY-MM-DD
+      const time = now.toTimeString().split(' ')[0]; // HH:MM:SS
+      setStartTime(time);
+      setStartDate(date);
     }
     setRunning(true);
     timerRef.current = setInterval(() => {
@@ -66,14 +69,6 @@ export default function PracticeSessionScreen() {
   }, []);
 
   const finishSession = () => {
-    //redirect to overview screen
-    //send duration in seconds and day of practice
-    //when practice is done, track time of stopping practice and date of stop practice
-    // if(totalSecondsRef.current < 60){
-    //     setSubmitErrorMessage('practice at least 1 minute before submitting');
-    //     setTimeout(() => {setSubmitErrorMessage('');}, 2000);
-    //     return;
-    // }
     stopTimer();
     router.push({
       pathname: "/overview",
@@ -81,9 +76,7 @@ export default function PracticeSessionScreen() {
         duration: totalSecondsRef.current.toString(),
         startTime: startTime,
         startDate: startDate,
-        piecesID: JSON.stringify(piecesPracticed),
-        // endTime : new Date().toLocaleTimeString(),
-        // endDate : new Date().toLocaleDateString()
+        piecesID: JSON.stringify(piecesPracticed)
       },
     });
   };
@@ -93,7 +86,7 @@ export default function PracticeSessionScreen() {
       let mounted = true;
       (async () => {
         try {
-          const piecesData = await db.getUserPieces();
+          const piecesData = await services.getAllPieces();
           if (mounted) setPieces(piecesData || []);
         } catch (e) {
           console.error('Failed to load pieces', e);

@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
+import * as Crypto from 'expo-crypto';
 import { db } from './databaseModule';
 import Constants from "expo-constants";
 const API_BASE_URL = Constants.expoConfig.extra.API_BASE_URL;
@@ -180,17 +181,29 @@ class Service {
     }
 
     async addSession(session){
-        const { userId, startDate, startTime, duration, notes } = session;
+        const { userId, piecesPracticed, startDate, startTime, duration, notes } = session;
         try {
-            const insertQuery = `INSERT INTO practiceSession (userId, startDate, startTime, duration, notes, createdAt, updatedAt) VALUES ($userId, $startDate, $startTime, $duration, $notes, datetime('now'), datetime('now'))`;
+            const SessionUUID = Crypto.randomUUID();
+            const insertQuery = `INSERT INTO practiceSession (id, userId, startDate, startTime, duration, notes, createdAt, updatedAt) VALUES ($id, $userId, $startDate, $startTime, $duration, $notes, datetime('now'), datetime('now'))`;
             await db.ensureInitialized();
             await db.runWriteQuery(insertQuery, {
+                $id: SessionUUID,
                 $userId: userId,
                 $startDate: startDate,
                 $startTime: startTime,
                 $duration: duration,
                 $notes: notes || ""
             });
+            if (piecesPracticed && piecesPracticed.length > 0) {
+                for (const pieceId of piecesPracticed) {
+                    const insertPieceQuery = `INSERT INTO practicedPiece (userId, pieceId, sessionId, createdAt, updatedAt) VALUES ($userId, $pieceId, $sessionId, datetime('now'), datetime('now'))`;
+                    await db.runWriteQuery(insertPieceQuery, {
+                        $userId: userId,
+                        $pieceId: pieceId,
+                        $sessionId: SessionUUID
+                    });
+                }
+            }
         } catch (error) {
             console.error("Error adding practice session:", error);
             throw error;

@@ -8,8 +8,8 @@ import {
     TextInput,
     View,
 } from "react-native";
-import { db } from "../src/databaseModule";
-import { syncDataToCloud, insertNewPracticeSession } from "../src/services";
+import services from "../src/services";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import style from "../src/style";
 
 
@@ -26,7 +26,7 @@ export default function overview() {
       let mounted = true;
       (async () => {
         try {
-          const piecesData = await db.getUserPieces();
+          const piecesData = await services.getAllPieces();
           if (mounted) setPieces(piecesData || []);
         } catch (e) {
           console.error('Failed to load pieces', e);
@@ -78,7 +78,8 @@ export default function overview() {
       <Pressable
         style={[style.submitButton, { bottom: 40 }]}
         onPress={async () => {
-          await insertNewPracticeSession(piecesPracticed, startDate, startTime, duration, notes);
+          const userId = await AsyncStorage.getItem("userId");
+          await services.addSession({userId, piecesPracticed, startDate, startTime, duration, notes});
           router.replace("/completion");
         }}
       >

@@ -46,6 +46,7 @@ export default function Profile() {
       </View>
       <FlatList
         style={localStyle.flatList}
+        contentContainerStyle={{ paddingBottom: 120 }}
         data={pieces}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => (
@@ -83,10 +84,11 @@ const localStyle = StyleSheet.create({
         marginLeft: 15
     },
     pieceItem: {
-        backgroundColor: "#78837d",
+        backgroundColor: "#494949ea",
         marginVertical: 8,
         marginHorizontal: 16,
-        borderRadius: 10
+        borderRadius: 10,
+        minHeight: 40
     },
     flatList: {
         width: "100%",

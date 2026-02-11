@@ -1,1 +1,58 @@
 NOTES.md
+
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+*/node_modules/
+
+# Expo (MobileApp)
+MobileApp/.expo/
+MobileApp/dist/
+MobileApp/web-build/
+MobileApp/expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+.env
+
+# Backend
+Backend/generated/prisma/
+
+# typescript
+*.tsbuildinfo
+
+# generated native folders
+MobileApp/ios/
+MobileApp/android/
+MobileApp/app-example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+Thumbs.db

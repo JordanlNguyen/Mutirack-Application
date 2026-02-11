@@ -9,24 +9,10 @@ import {
     View,
 } from "react-native";
 import { db } from "../src/databaseModule";
+import { syncDataToCloud, insertNewPracticeSession } from "../src/services";
 import style from "../src/style";
-/*
-    --------- data needed from practice session ---------
-    - duration in seconds (INT)
-    - startDate mm/dd/yyyy (STRING)
-    - startTime hh:mm:ss (STRING)
-    - piecesID ([STRING])
 
-    --------- data needed from user in overview ---------
-    - notes (STRING)
 
-    --------- user actions on this screens ---------
-    - user can :
-        - edit duration
-        - edit pieces that are practiced
-        - type up notes
-        - submit session
-*/
 export default function overview() {
   const { duration, startTime, startDate, piecesID } = useLocalSearchParams();
   const [piecesPracticed, setPiecesPracticed] = useState(() =>
@@ -37,21 +23,18 @@ export default function overview() {
 
   useFocusEffect(
     useCallback(() => {
-      const piecesData = db.getUserPieces() || [];
-      setPieces(piecesData);
+      let mounted = true;
+      (async () => {
+        try {
+          const piecesData = await db.getUserPieces();
+          if (mounted) setPieces(piecesData || []);
+        } catch (e) {
+          console.error('Failed to load pieces', e);
+        }
+      })();
+      return () => { mounted = false; };
     }, []),
   );
-
-  function submitSession() {
-    db.injectPracticeSession(
-      piecesPracticed,
-      startDate,
-      startTime,
-      Number(duration),
-      notes,
-    );
-    router.replace("/completion");
-  }
 
   return (
     <View style={style.container}>
@@ -74,7 +57,7 @@ export default function overview() {
                 }}
               >
                 <Text style={{ fontSize: 20, margin: 5, marginLeft: 15 }}>
-                  {isPracticed ? "✅" : "[   ]"} {piece.name}
+                  {isPracticed ? "✅" : "[   ]"} {piece.title || piece.name}
                 </Text>
               </Pressable>
             );
@@ -94,9 +77,12 @@ export default function overview() {
 
       <Pressable
         style={[style.submitButton, { bottom: 40 }]}
-        onPress={submitSession}
+        onPress={async () => {
+          await insertNewPracticeSession(piecesPracticed, startDate, startTime, duration, notes);
+          router.replace("/completion");
+        }}
       >
-        <Text style={{ fontSize: 25 }}> Done </Text>
+        <Text style={{ fontSize: 25 }}> Submit </Text>
       </Pressable>
     </View>
   );

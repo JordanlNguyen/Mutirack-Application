@@ -27,3 +27,33 @@ Prisma is a forum that allows for changing, migrating, and tracking versions of 
 - models are added to the schema.prisma file
 - '''npx prisma migrate dev --name init''' create migration to update production database
 - '''npx prisma generate''' generate prisma client mirroring the data base
+
+# data syncing
+the main goal of data syncing in this application is to pursue data consistency throughout multiple device local databases and cloud storage database, reduce delays in data syncing, manage simultaneous updates, and use minimal bandwidth
+
+## common sync methods
+- full synchronization: transfers entire data sets, ideal for inital setup or smaller datasets '''could be used for inital registration or login on a new device'''
+- indremental synchronization: only transfers changes made since last sync
+- bidirectional synchronization: allows data to flow both ways '''ideal for offline functionality and managing conflicts effectily'''
+
+# Mobile Application Requirments
+- Home
+    - user is able to see total practice times throughout the day, month, and current year through the cycling title
+    - user is able to see line graph of the current week showing durations for each day
+    - user is able to view pie chart of most practiced pieces
+    - user is able to view calander days of practiced sessions
+- Practice
+    - user is able to start/pause timer
+    - user is able to reset timer
+    - user is able to select pieces they plan to practice
+    - user is able to submit session to go to overview
+    - user is able to manually add a session
+- Analytics
+    - remove (this will be on the home screen)
+- Session
+    - user is able to view all sessions in a list
+    - user is able to tap and view session where they are able to edit or delete session
+- profile
+    - user is able to configure profile information
+    - user is able to view pieces that are within user database
+    - user is able to add or delete pieces

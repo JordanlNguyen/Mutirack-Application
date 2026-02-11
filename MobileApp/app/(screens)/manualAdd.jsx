@@ -9,7 +9,8 @@ import {
     TouchableWithoutFeedback,
     View,
 } from "react-native";
-import { db } from "../src/databaseModule";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import services from "../src/services";
 import style from "../src/style";
 
 export default function manualAdd() {
@@ -27,20 +28,47 @@ export default function manualAdd() {
 
   useFocusEffect(
     useCallback(() => {
-      const piecesData = db.getUserPieces() || [];
-      setPieces(piecesData);
+      let mounted = true;
+      (async () => {
+        try {
+          const piecesData = await services.getAllPieces();
+          if (mounted) setPieces(piecesData || []);
+        } catch (e) {
+          console.error('Failed to load pieces', e);
+        }
+      })();
+      return () => { mounted = false; };
     }, []),
   );
 
-  function submitSession() {
+  async function submitSession() {
     const duration = Number(hours) * 60 * 60 + Number(minutes) * 60;
-    db.injectPracticeSession(
-      piecesPracticed,
-      `${startMonth}/${startDay}/${startYear}`,
-      `${startHour}:${startMinute}:00 ${meridiem}`,
+    const userId = await AsyncStorage.getItem("userId");
+
+    if (!userId) {
+      console.error("userId is null or undefined");
+      return;
+    }
+
+    const paddedMonth = String(startMonth).padStart(2, "0");
+    const paddedDay = String(startDay).padStart(2, "0");
+    const paddedHour = String(startHour).padStart(2, "0");
+    const paddedMinute = String(startMinute).padStart(2, "0");
+
+    let hour24 = Number(paddedHour);
+    if (meridiem === "PM" && hour24 < 12) hour24 += 12;
+    if (meridiem === "AM" && hour24 === 12) hour24 = 0;
+    const startTime = `${String(hour24).padStart(2, "0")}:${paddedMinute}:00`;
+    const startDate = `${startYear}-${paddedMonth}-${paddedDay}`;
+
+    await services.addSession({
+      userId,
+      startDate,
+      startTime,
       duration,
       notes,
-    );
+    });
+
     router.replace("/completion");
   }
 
@@ -181,7 +209,7 @@ export default function manualAdd() {
                   }}
                 >
                   <Text style={{ fontSize: 20, margin: 5, marginLeft: 15 }}>
-                    {isPracticed ? "✅" : "[   ]"} {piece.name}
+                    {isPracticed ? "✅" : "[   ]"} {piece.title || piece.name}
                   </Text>
                 </Pressable>
               );

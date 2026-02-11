@@ -1,6 +1,9 @@
 {
   "expo": {
     "name": "MobileApp3",
+    "extra" : {
+      "API_BASE_URL": "http://10.0.2.2:3000"
+    },
     "slug": "MobileApp3",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -38,7 +41,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -13,7 +13,7 @@ export function TabBar({ state, descriptors, navigation } : BottomTabBarProps) {
   const icon = {
     index : (props : any) => <Feather name="home" size={24} color={'white'}/>,
     practice : (props : any) => <Feather name="play" size={24} color={'white'}/>,
-    analytics : (props : any) => <Feather name="activity" size={24} color={'white'}/>,
+    profile : (props : any) => <Feather name="user" size={24} color={'white'}/>,
     sessions : (props : any) => <Feather name="bookmark" size={24} color={'white'}/>
 
 };
@@ -84,7 +84,15 @@ const style = StyleSheet.create({
         alignItems : 'center',
         marginHorizontal : 50,
         padding : 5,
-        borderRadius : 35
+        borderRadius : 35,
+        shadowColor : '#000',
+        shadowOffset : {
+            width : 0,
+            height : 10
+        },
+        shadowOpacity : 0.25,
+        shadowRadius : 3.5,
+        elevation : 5
     },
     tabBarItem : {
         flex : 1,

@@ -15,7 +15,7 @@ export default function PracticeSessionScreen() {
   const [submitErrorMessage, setSubmitErrorMessage] = useState("");
   const [pieces, setPieces] = useState([]);
   const [piecesPracticed, setPiecesPracticed] = useState([]);
-  const timerRef = (useRef < NodeJS.Timeout) | null | (number > null);
+  const timerRef = useRef(null);
   const totalSecondsRef = useRef(0);
 
   // start the timer
@@ -74,7 +74,7 @@ export default function PracticeSessionScreen() {
     //     setTimeout(() => {setSubmitErrorMessage('');}, 2000);
     //     return;
     // }
-    stopTimer;
+    stopTimer();
     router.push({
       pathname: "/overview",
       params: {
@@ -90,8 +90,16 @@ export default function PracticeSessionScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      const piecesData = db.getUserPieces() || [];
-      setPieces(piecesData);
+      let mounted = true;
+      (async () => {
+        try {
+          const piecesData = await db.getUserPieces();
+          if (mounted) setPieces(piecesData || []);
+        } catch (e) {
+          console.error('Failed to load pieces', e);
+        }
+      })();
+      return () => { mounted = false; };
     }, []),
   );
 
@@ -151,7 +159,7 @@ export default function PracticeSessionScreen() {
                 }}
               >
                 <Text style={{ fontSize: 20, margin: 5, marginLeft: 15 }}>
-                  {isPracticed ? "✅" : "[   ]"} {piece.name}
+                  {isPracticed ? "✅" : "[   ]"} {piece.title || piece.name}
                 </Text>
               </Pressable>
             );

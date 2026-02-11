@@ -36,6 +36,7 @@ model practiceSession {
 
 model piece {
   id              String            @id @default(uuid())
+  userId          String
   title           String
   composer        String
   instrumentation String
@@ -43,10 +44,13 @@ model piece {
   updatedAt       DateTime          @updatedAt
   deleteAt        DateTime?
   practicedPieces practicedPiece[]
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model practicedPiece {
   id                String   @id @default(uuid())
+  userId            String
   practiceSessionId String
   pieceId           String
   createdAt         DateTime @default(now())
@@ -54,4 +58,5 @@ model practicedPiece {
 
   practiceSession practiceSession @relation(fields: [practiceSessionId], references: [id])
   pieces          piece           @relation(fields: [pieceId], references: [id])
+  user            User            @relation(fields: [userId], references: [id])
 }

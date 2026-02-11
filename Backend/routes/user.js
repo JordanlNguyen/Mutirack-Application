@@ -1,5 +1,5 @@
 import express from 'express'
-import {getUser, createUser, existUser, createToken} from '../services/users.js'
+import {getUser, createUser, existUser, createToken} from '../services/user.js'
 const userRouter = express.Router();
 
 // login user
@@ -13,11 +13,14 @@ userRouter.post('/login', async (req,res) => {
     let token = null
     const DBret = await getUser(userName, password)
     if(DBret.success) {
-        token = createToken(DBret.user.userName, DBret.user.id)
+        token = createToken(DBret.userName, DBret.userId)
     }
+
+    console.log("DBret: ", DBret.userId)
 
     return res.status(DBret.status).json({
         success : DBret.success,
+        userId: DBret.userId,
         code: DBret.code,
         message: DBret.message,
         token: token
@@ -45,6 +48,7 @@ userRouter.post('/register', async (req, res) => {
     return res.status(DBret.status).json({
         success: DBret.success,
         code: DBret.code,
+        userId: DBret.id,
         message: DBret.message,
         token: token
     })

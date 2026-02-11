@@ -49,7 +49,8 @@ export async function getUser(userName, password) {
         status: 200,
         success: true,
         code: "LOGIN_SUCCESS",
-        user: DBret
+        userId: DBret.id,
+        userName : DBret.userName
     })
 }
 

@@ -1,5 +1,3 @@
-import { useRouter } from "expo-router";
-import { useState } from "react";
 import {
     Keyboard,
     Pressable,
@@ -9,7 +7,9 @@ import {
     TouchableWithoutFeedback,
     View
 } from "react-native";
-import * as Keychain from "react-native-keychain";
+import { router } from "expo-router";
+import { useState } from "react";
+import services from "./src/services";
 import style from "./src/style";
 
 
@@ -20,58 +20,10 @@ function Index() {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [isLogin, setIsLogin] = useState(1);
-  const router = useRouter();
 
   function directHome() {
-    router.push({
-      pathname: "/(tabs)/index",
-    });
+    router.push('/(tabs)')
   }
-
-  async function storeToken(token) {
-    await Keychain.setGenericPassword(token);
-  }
-
-  async function login(un, pw) {
-    const url = "http://10.0.2.2:3000/users/login";
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userName: un, password: pw }),
-      });
-      await storeToken(response.data.token);
-      return response.status;
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  }
-
-  async function register(un, pw, nm, pn) {
-    const url = "http://10.0.2.2:3000/users/register";
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userName: un,
-          password: pw,
-          name: nm,
-          phonenumber: pn,
-        }),
-      });
-      console.log(await response.text());
-    } catch (error) {
-      console.log(error);
-    } finally {
-      return;
-    }
-  }
-
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -127,25 +79,26 @@ function Index() {
             </Text>
           </Pressable>
         </View>
+
         <Pressable
           style={localStyle.submitButton}
           onPress={async () => {
             var results = 0;
-            console.log("pressed");
             if (isLogin) {
-              results = await login(userName, password);
+              results = await services.login(userName, password);
             } else {
-              results = await register(userName, password, name, number);
+              results = await services.register(userName, password, name, number);
             }
-            console.log(results);
+            console.log("results: ", results);
             if (results === 200) {
               console.log("going home");
               return directHome();
             }
           }}
         >
-          <Text>Submit</Text>
+          <Text style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>{isLogin ? "Login" : "Register"}</Text>
         </Pressable>
+
       </View>
     </TouchableWithoutFeedback>
   );
@@ -156,6 +109,8 @@ const localStyle = StyleSheet.create({
   title: {
     color: "white",
     fontSize: 50,
+    position: "absolute",
+    top: 100,
   },
   textInputs: {
     borderBottomWidth: 1,
@@ -163,6 +118,7 @@ const localStyle = StyleSheet.create({
     borderColor: "white",
     width: "75%",
     color: "white",
+    margin: 10,
   },
   loginRegisterSwitchPanel: {
     width: "65%",
@@ -176,12 +132,22 @@ const localStyle = StyleSheet.create({
   },
   submitButton: {
     margin: 50,
-    backgroundColor: "red",
+    backgroundColor: "#78837d",
     width: "75%",
-    height: 40,
+    height: 60,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 16,
+    position: "absolute",
+    bottom : 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 

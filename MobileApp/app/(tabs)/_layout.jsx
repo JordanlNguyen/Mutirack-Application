@@ -45,11 +45,11 @@ export default function TabLayout() {
         />
 
         <Tabs.Screen
-            name="analytics"
+            name="sessions"
             options={{
                 headerShadowVisible : false,
                 headerTitleAlign : 'center',
-                title: 'Analytics',
+                title: 'Sessions',
                 headerStyle : {
                     backgroundColor : '#2c2e33',
                     height : 50
@@ -64,11 +64,11 @@ export default function TabLayout() {
         />
 
         <Tabs.Screen
-            name="sessions"
+            name="profile"
             options={{
                 headerShadowVisible : false,
                 headerTitleAlign : 'center',
-                title: 'Sessions',
+                title: 'Profile',
                 headerStyle : {
                     backgroundColor : '#2c2e33',
                     height : 50

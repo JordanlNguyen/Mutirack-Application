@@ -11,7 +11,18 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "app/(screens)/manualAdd.jsx", "app/(screens)/overview.jsx", "app/(screens)/sessionDetails.jsx", "app/(tabs)/_layout.jsx", "app/(tabs)/analytics.jsx", "app/(tabs)/index.jsx", "app/(tabs)/practice.jsx", "app/(tabs)/sessions.jsx", "app/_layout.jsx", "app/index.jsx"  ]
+    "../.expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "app/(screens)/manualAdd.jsx",
+    "app/(screens)/overview.jsx",
+    "app/(screens)/sessionDetails.jsx",
+    "app/(tabs)/_layout.jsx",
+    "app/(tabs)/analytics.jsx",
+    "app/(tabs)/index.jsx",
+    "app/(tabs)/practice.jsx",
+    "app/(tabs)/sessions.jsx",
+    "app/_layout.jsx",
+    "app/index.jsx",
+    ".expo/types/**/*.ts"
+  ]
 }

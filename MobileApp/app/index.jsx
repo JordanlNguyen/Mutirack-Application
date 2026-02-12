@@ -91,7 +91,6 @@ function Index() {
             }
             console.log("results: ", results);
             if (results === 200) {
-              console.log("going home");
               return directHome();
             }
           }}

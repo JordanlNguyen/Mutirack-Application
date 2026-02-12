@@ -84,7 +84,7 @@ const localStyle = StyleSheet.create({
         marginLeft: 15
     },
     pieceItem: {
-        backgroundColor: "#494949ea",
+        backgroundColor: "#484b53",
         marginVertical: 8,
         marginHorizontal: 16,
         borderRadius: 10,

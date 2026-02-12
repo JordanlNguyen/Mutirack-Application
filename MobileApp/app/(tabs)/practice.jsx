@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View, StyleSheet } from "react-native";
 import services from "../src/services";
 import style from "../src/style";
 
@@ -98,13 +98,89 @@ export default function PracticeSessionScreen() {
 
   return (
     <View style={[style.container, {}]}>
+
+      <View style={localStyle.header}>
+        <Text style={localStyle.headerTitle}>Practice Session</Text>
+      </View>
+      
+      <TimerSection
+        hour={hour}
+        minute={minute}
+        second={second}
+        startTime={startTime}
+        resetTimer={resetTimer}
+        stopTimer={stopTimer}
+        startTimer={startTimer}
+      />
+
+      <View style={localStyle.headerRow}>
+        <Text style={localStyle.sectionTitle}>Pieces</Text>
+        <Pressable onPress={() => router.push("/addPiece")}>
+          <Text style={{ color: "#ffffff6e", fontSize: 14 }}>+ add piece</Text>
+        </Pressable>
+      </View>
+      <View style={localStyle.pieceSelectionContainer}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+          {pieces.map((piece) => {
+            const isPracticed = piecesPracticed.includes(piece.id);
+            return (
+              <ListItem key={piece.id} piece={piece} isPracticed={isPracticed} piecesPracticed={piecesPracticed} setPiecesPracticed={setPiecesPracticed} />
+            );
+          })}
+        </ScrollView>
+      </View>
+
       <Pressable
-        style={style.manualAddButton}
-        onPress={() => router.push("/manualAdd")}
+        style={localStyle.finishButton}
+        onPress={finishSession}
       >
-        <Feather name="plus" size={20} />
+        <Text style={localStyle.finishButtonText}> Finish Session</Text>
       </Pressable>
-      <View style={style.timerContainter}>
+
+      {submitErrorMessage !== "" && (
+        <View style={style.submitErrorMessageContainer}>
+          <Text
+            style={{
+              textAlign: "center",
+              fontSize: 15,
+              fontFamily: "serif",
+              color: "black",
+            }}
+          >
+            {submitErrorMessage}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
+
+const ListItem = ({ piece, isPracticed, piecesPracticed, setPiecesPracticed }) => {
+    return(
+      <Pressable
+        key={piece.id}
+        onPress={() => {
+          if (piecesPracticed.includes(piece.id)) {
+            setPiecesPracticed(
+              piecesPracticed.filter((id) => id !== piece.id),
+            );
+          } else {
+            setPiecesPracticed([...piecesPracticed, piece.id]);
+          }
+        }}
+        style={localStyle.pieceItem}
+      >
+        <Text style={[localStyle.pieceText, { color: isPracticed ? "#ffffff" : "#ffffff6e" }]}>
+          {isPracticed ? "✅" : "[   ]"} {piece.title || piece.name}
+        </Text>
+      </Pressable>
+    )
+}
+
+const TimerSection = ({ hour, minute, second, startTime, resetTimer, stopTimer, startTimer }) => {
+  return (
+      <View style={localStyle.timeContainer}>
         <Text style={style.time}>
           {" "}
           {hour}:{minute}:{second}
@@ -134,56 +210,70 @@ export default function PracticeSessionScreen() {
           </Pressable>
         </View>
       </View>
-      <View style={style.pieceSelectionContainer}>
-        <ScrollView>
-          {pieces.map((piece) => {
-            const isPracticed = piecesPracticed.includes(piece.id);
-            return (
-              <Pressable
-                key={piece.id}
-                onPress={() => {
-                  if (piecesPracticed.includes(piece.id)) {
-                    setPiecesPracticed(
-                      piecesPracticed.filter((id) => id !== piece.id),
-                    );
-                  } else {
-                    setPiecesPracticed([...piecesPracticed, piece.id]);
-                  }
-                }}
-              >
-                <Text style={{ fontSize: 20, margin: 5, marginLeft: 15 }}>
-                  {isPracticed ? "✅" : "[   ]"} {piece.title || piece.name}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-      </View>
-      <Pressable
-        style={[style.submitButton, { bottom: 180 }]}
-        onPress={finishSession}
-      >
-        <Feather name="check" size={20} />
-      </Pressable>
-
-      {submitErrorMessage !== "" && (
-        <View style={style.submitErrorMessageContainer}>
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: 15,
-              fontFamily: "serif",
-              color: "black",
-            }}
-          >
-            {submitErrorMessage}
-          </Text>
-        </View>
-      )}
-    </View>
-  );
+  )
 }
-
-// ----------------------- to do ------------------------------
-// - logical error where user can go to overview without starting practice session
-// - when done is pressed, timer should stop
+const localStyle = StyleSheet.create({
+    header: {
+      width: "100%",
+      paddingVertical: 20,
+      paddingHorizontal: 15,
+      marginBottom: 10,
+      top: 0,
+      position: "absolute",
+    },
+    headerTitle: {
+      fontSize: 24,
+      fontWeight: "bold",
+      color: "white",
+    },
+    headerRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      width: "90%",
+      paddingHorizontal: 15,
+      marginVertical: 10,
+    },
+    sectionTitle: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: "white",
+    },
+    pieceSelectionContainer: {
+      backgroundColor: "#484b53",
+      width: "90%",
+      maxHeight: 250,
+      borderRadius: 10,
+      marginBottom: 20,
+    },
+    pieceItem: {
+      padding: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: "#3a3d43",
+    },
+    pieceText: {
+      fontSize: 16,
+      marginLeft: 5,
+    },
+    finishButton: {
+      backgroundColor: "#2ECC71",
+      flexDirection: "row",
+      padding: 0,
+      borderRadius: 15,
+      justifyContent: "center",
+      alignItems: "center",
+      width: 150,
+      height: 50,
+    },
+    finishButtonText: {
+      fontWeight: "bold",
+      fontSize: 18,
+      color: "white",
+      marginLeft: 8,
+    },
+    timeContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      marginVertical: 20,
+    },
+})

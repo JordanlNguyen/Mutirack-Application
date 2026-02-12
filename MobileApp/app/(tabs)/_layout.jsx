@@ -9,76 +9,32 @@ export default function TabLayout() {
         <Tabs.Screen
             name="index"
             options={{
-                headerShadowVisible : false,
-                headerTitleAlign : 'center',
+                headerShown: false,
                 title: 'Home',
-                headerStyle : {
-                    backgroundColor : '#2c2e33',
-                    height : 50
-                },
-                headerTintColor : '#5c5d5f',
-                headerTitleStyle : {
-                    alignSelf : 'center',
-                    fontFamily : 'serif'
-                },
-                headerStatusBarHeight : 0
             }}
         />
 
         <Tabs.Screen
             name="practice"
             options={{
-                headerShadowVisible : false,
-                headerTitleAlign : 'center',
+                headerShown: false,
                 title: 'Practice',
-                headerStyle : {
-                    backgroundColor : '#2c2e33',
-                    height : 50
-                },
-                headerTintColor : '#5c5d5f',
-                headerTitleStyle : {
-                    alignSelf : 'center',
-                    fontFamily : 'serif'
-                },
-                headerStatusBarHeight : 0
             }}
         />
 
         <Tabs.Screen
             name="sessions"
             options={{
-                headerShadowVisible : false,
-                headerTitleAlign : 'center',
+                headerShown: false,
                 title: 'Sessions',
-                headerStyle : {
-                    backgroundColor : '#2c2e33',
-                    height : 50
-                },
-                headerTintColor : '#5c5d5f',
-                headerTitleStyle : {
-                    alignSelf : 'center',
-                    fontFamily : 'serif'
-                },
-                headerStatusBarHeight : 0
             }}
         />
 
         <Tabs.Screen
             name="profile"
             options={{
-                headerShadowVisible : false,
-                headerTitleAlign : 'center',
+                headerShown: false,
                 title: 'Profile',
-                headerStyle : {
-                    backgroundColor : '#2c2e33',
-                    height : 50
-                },
-                headerTintColor : '#5c5d5f',
-                headerTitleStyle : {
-                    alignSelf : 'center',
-                    fontFamily : 'serif'
-                },
-                headerStatusBarHeight : 0
             }}
         />
         </Tabs>

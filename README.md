@@ -3,11 +3,21 @@
 Musitrack is a cross platform mobile application built with the PERN Stack. This application offers a user-friendly application and platform for easy session tracking and anayltics.
 
 ## Screen Shots
-![home screen](resources/home.png)
-![practice screen](resources/practice.png)
-![add session screen](resources/add_session.png)
-![session list screen](resources/session_list.png)
-![session overview screen](resources/session_overview.png)
+<table>
+	<tr>
+		<td><img src="resources/home.png" width="320"/></td>
+		<td><img src="resources/session_list.png" width="320"/></td>
+	</tr>
+	<tr>
+		<td><img src="resources/practice.png" width="320"/></td>
+		<td><img src="resources/add_session.png" width="320"/></td>
+	</tr>
+	<tr>
+		<td><img src="resources/session_overview.png" width="320"/></td>
+		<td></td>
+	</tr>
+</table>
+
 
 ## Targeted Audience
 This project was made as a solution for musicians who want to organize, view, and track their practice progress with minimal effort, allowing more time to focus of musical practice and less time worrying about tracking.
